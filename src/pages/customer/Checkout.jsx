@@ -123,11 +123,10 @@ function Checkout() {
         return;
       }
 
-      // Convert cart items to order items
-      const orderItems = cart.map((item) => ({
-        product: item.product?._id,
-        quantity: Number(item.quantity),
-      }));
+     const orderItems = cart.map((item) => ({
+  product: item.product?._id,
+  quantity: Number(item.quantity),
+}));
 
       console.log("ORDER ITEMS:", orderItems);
 
