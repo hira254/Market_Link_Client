@@ -31,7 +31,7 @@ const findCompletedOrder = () => {
 
     const completedOrder = savedOrders.find(
       (order) =>
-        (order.status === "Completed" ||
+        (order.status === "completed" ||
           order.status === "completed") &&
         order.items?.some(
           (item) =>
