@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/BaseUrl";
 const AuthContext = createContext(null);
 
-const API_URL = "/api/auth";
+const API_URL = `${import.meta.env.VITE_BASE_API_URL}/api/auth`;
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
