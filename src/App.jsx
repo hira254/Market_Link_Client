@@ -25,6 +25,7 @@ import Cart from "./pages/customer/Cart";
 import Checkout from "./pages/customer/Checkout";
 import Orders from "./pages/customer/Orders";
 import Favorites from "./pages/customer/Favorites";
+import AIChatbot from "./components/AIChatbot";
 
 // Farmer
 import FarmerDashboard from "./pages/farmer/FarmerDashboard";
@@ -319,6 +320,7 @@ function App() {
       position="top-right"
       autoClose={3000}
     />
+    <> <AIChatbot /> </>
    </>
   );
 }
