@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { Link } from "react-router-dom";
 import logoImg from "../../assets/logo.png";
 
@@ -31,8 +32,8 @@ function AdminProducts() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/products",
+      const response = await axiosInstance.get(
+        "/api/products",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,8 +73,8 @@ function AdminProducts() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.delete(
-        `http://localhost:4000/api/products/admin/${productId}`,
+      const response = await axiosInstance.delete(
+        `/api/products/admin/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

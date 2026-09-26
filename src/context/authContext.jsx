@@ -1,10 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
+import axiosInstance from "../utils/BaseUrl";
 const AuthContext = createContext(null);
 
-const API_URL = "http://localhost:4000/api/auth";
+const API_URL = "/api/auth";
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -20,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   });
 
   const register = async (formData) => {
-    const response = await axios.post(
+    const response = await axiosInstance.post(
       `${API_URL}/register`,
       formData
     );
@@ -29,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (formData) => {
-    const response = await axios.post(
+    const response = await axiosInstance.post(
       `${API_URL}/login`,
       formData
     );

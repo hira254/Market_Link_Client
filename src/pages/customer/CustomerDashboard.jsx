@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { useAuth } from "../../context/AuthContext";
 import Sidebar from "../../components/Sidebar";
 
@@ -51,18 +52,18 @@ const [cartCount, setCartCount] = useState(0);
 
       const [ordersResponse, favoritesResponse, cartResponse] =
         await Promise.all([
-          axios.get(
-            "http://localhost:4000/api/orders/my",
+          axiosInstance.get(
+            "/api/orders/my",
             { headers }
           ),
 
-          axios.get(
-            "http://localhost:4000/api/favorites/my",
+          axiosInstance.get(
+            "/api/favorites/my",
             { headers }
           ),
 
-          axios.get(
-            "http://localhost:4000/api/cart",
+          axiosInstance.get(
+            "/api/cart",
             { headers }
           ),
         ]);

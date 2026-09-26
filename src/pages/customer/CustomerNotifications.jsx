@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { useAuth } from "../../context/AuthContext";
 import Sidebar from "../../components/Sidebar";
 import { toast } from "react-toastify";
@@ -27,8 +28,8 @@ function CustomerNotifications() {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:4000/api/notifications/my",
+      const response = await axiosInstance.get(
+        "/api/notifications/my",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,8 +64,8 @@ function CustomerNotifications() {
   // =========================
   const handleMarkAsRead = async (id) => {
     try {
-      await axios.put(
-        `http://localhost:4000/api/notifications/${id}/read`,
+      await axiosInstance.put(
+        `/api/notifications/${id}/read`,
         {},
         {
           headers: {
@@ -97,8 +98,8 @@ function CustomerNotifications() {
   // =========================
   const handleMarkAllAsRead = async () => {
     try {
-      await axios.put(
-        "http://localhost:4000/api/notifications/read-all",
+      await axiosInstance.put(
+        "/api/notifications/read-all",
         {},
         {
           headers: {
@@ -130,8 +131,8 @@ function CustomerNotifications() {
   // =========================
   const handleDelete = async (id) => {
     try {
-      await axios.delete(
-        `http://localhost:4000/api/notifications/${id}`,
+      await axiosInstance.delete(
+        `/api/notifications/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { Link } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import { toast } from "react-toastify";
@@ -15,7 +16,7 @@ import {
   Loader2 
 } from "lucide-react";
 
-const API_URL = "http://localhost:4000/api/farmers";
+const API_URL = "/api/farmers";
 
 function FarmerProfile() {
   const [profile, setProfile] = useState(null);
@@ -70,7 +71,7 @@ function FarmerProfile() {
         return;
       }
 
-      const response = await axios.get(`${API_URL}/profile`, {
+      const response = await axiosInstance.get(`${API_URL}/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -148,12 +149,12 @@ function FarmerProfile() {
 
       let response;
       if (profile) {
-        response = await axios.put(`${API_URL}/profile`, payload, {
+        response = await axiosInstance.put(`${API_URL}/profile`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success(response.data?.message || "Profile updated successfully");
       } else {
-        response = await axios.post(`${API_URL}/profile`, payload, {
+        response = await axiosInstance.post(`${API_URL}/profile`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success(response.data?.message || "Profile created successfully");

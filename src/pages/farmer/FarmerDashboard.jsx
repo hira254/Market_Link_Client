@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Sidebar from "../../components/Sidebar";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 
 import {
   Package,
@@ -53,8 +54,8 @@ function FarmerDashboard() {
     // =========================
     // 1. FARMER ORDERS
     // =========================
-    const ordersResponse = await axios.get(
-      "http://localhost:4000/api/orders/farmer/orders",
+    const ordersResponse = await axiosInstance.get(
+      "/api/orders/farmer/orders",
       { headers }
     );
 
@@ -83,8 +84,8 @@ function FarmerDashboard() {
     // =========================
     // 2. FARMER PRODUCTS
     // =========================
-    const productsResponse = await axios.get(
-      "http://localhost:4000/api/products/my",
+    const productsResponse = await axiosInstance.get(
+      "/api/products/my",
       { headers }
     );
 
@@ -95,8 +96,8 @@ function FarmerDashboard() {
     // =========================
     // 3. FARMER REVIEWS
     // =========================
-    const reviewsResponse = await axios.get(
-      "http://localhost:4000/api/reviews/reviews",
+    const reviewsResponse = await axiosInstance.get(
+      "/api/reviews/reviews",
       { headers }
     );
 

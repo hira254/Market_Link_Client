@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { useAuth } from "../../context/AuthContext";
 import Sidebar from "../../components/Sidebar";
 import {
@@ -36,8 +37,8 @@ function CustomerProfile() {
         setLoading(true);
         setError("");
 
-        const response = await axios.get(
-          "http://localhost:4000/api/customer/profile",
+        const response = await axiosInstance.get(
+          "/api/customer/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -101,8 +102,8 @@ function CustomerProfile() {
     // Reload original profile data
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:4000/api/customer/profile",
+        const response = await axiosInstance.get(
+          "/api/customer/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -135,8 +136,8 @@ function CustomerProfile() {
     try {
       setError("");
 
-      const response = await axios.put(
-        "http://localhost:4000/api/customer/profile",
+      const response = await axiosInstance.put(
+        "/api/customer/profile",
         formData,
         {
           headers: {

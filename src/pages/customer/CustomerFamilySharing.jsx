@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { toast } from "react-toastify";
 import { Users, UserPlus, Trash2, Mail, Phone, Loader2 } from "lucide-react";
 
-const API_URL = "http://localhost:4000/api/customer/family";
+const API_URL = "/api/customer/family";
 
 function CustomerFamilySharing() {
   const [familyMembers, setFamilyMembers] = useState([]);
@@ -30,7 +31,7 @@ function CustomerFamilySharing() {
         return;
       }
 
-      const response = await axios.get(API_URL, {
+      const response = await axiosInstance.get(API_URL, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -67,7 +68,7 @@ function CustomerFamilySharing() {
       setAdding(true);
       const token = getToken();
 
-      const response = await axios.post(API_URL, formData, {
+      const response = await axiosInstance.post(API_URL, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -92,7 +93,7 @@ function CustomerFamilySharing() {
     try {
       const token = getToken();
 
-      const response = await axios.delete(`${API_URL}/${memberId}`, {
+      const response = await axiosInstance.delete(`${API_URL}/${memberId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

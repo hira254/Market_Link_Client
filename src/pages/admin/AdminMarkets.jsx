@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { Link } from "react-router-dom";
 import logoImg from "../../assets/logo.png";
 
@@ -45,8 +46,8 @@ function AdminMarkets() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/markets",
+      const response = await axiosInstance.get(
+        "/api/markets",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -111,8 +112,8 @@ function AdminMarkets() {
       };
 
       if (editingId) {
-        const response = await axios.put(
-          `http://localhost:4000/api/markets/${editingId}`,
+        const response = await axiosInstance.put(
+          `/api/markets/${editingId}`,
           data,
           {
             headers: {
@@ -126,8 +127,8 @@ function AdminMarkets() {
             "Market updated successfully."
         );
       } else {
-        const response = await axios.post(
-          "http://localhost:4000/api/markets",
+        const response = await axiosInstance.post(
+          "/api/markets",
           data,
           {
             headers: {
@@ -191,8 +192,8 @@ function AdminMarkets() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.delete(
-        `http://localhost:4000/api/markets/${marketId}`,
+      const response = await axiosInstance.delete(
+        `/api/markets/${marketId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

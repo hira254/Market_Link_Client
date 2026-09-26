@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -26,8 +27,8 @@ const loadOrders = async () => {
       return;
     }
 
-    const response = await axios.get(
-      "http://localhost:4000/api/orders/my",
+    const response = await axiosInstance.get(
+      "/api/orders/my",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -52,8 +53,8 @@ const loadOrders = async () => {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.post(
-        "http://localhost:4000/api/reviews",
+      await axiosInstance.post(
+        "/api/reviews",
         {
           product: reviewProduct.product,
           order: orderId,

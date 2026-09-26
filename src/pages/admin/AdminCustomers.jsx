@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { Link } from "react-router-dom";
 import logoImg from "../../assets/logo.png";
 
@@ -34,8 +35,8 @@ function AdminCustomers() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/admin/users",
+      const response = await axiosInstance.get(
+        "/api/admin/users",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -71,8 +72,8 @@ function AdminCustomers() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.put(
-        `http://localhost:4000/api/admin/users/${customerId}/status`,
+      const response = await axiosInstance.put(
+        `/api/admin/users/${customerId}/status`,
         { status },
         {
           headers: {

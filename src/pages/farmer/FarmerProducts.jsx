@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { Link } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 
@@ -55,8 +56,8 @@ function FarmerProducts() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/products/my",
+      const response = await axiosInstance.get(
+        "/api/products/my",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -116,8 +117,8 @@ function FarmerProducts() {
       let response;
 
       if (editingId) {
-        response = await axios.put(
-          `http://localhost:4000/api/products/${editingId}`,
+        response = await axiosInstance.put(
+          `/api/products/${editingId}`,
           data,
           {
             headers: {
@@ -128,8 +129,8 @@ function FarmerProducts() {
 
         setMessage("Product updated successfully! ✅");
       } else {
-        response = await axios.post(
-          "http://localhost:4000/api/products",
+        response = await axiosInstance.post(
+          "/api/products",
           data,
           {
             headers: {
@@ -204,8 +205,8 @@ function FarmerProducts() {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.delete(
-        `http://localhost:4000/api/products/${id}`,
+      await axiosInstance.delete(
+        `/api/products/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -237,8 +238,8 @@ function FarmerProducts() {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.put(
-        `http://localhost:4000/api/products/${product._id}`,
+      await axiosInstance.put(
+        `/api/products/${product._id}`,
         {
           isAvailable: !product.isAvailable,
         },

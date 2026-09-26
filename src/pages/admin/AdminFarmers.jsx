@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { Link } from "react-router-dom";
 import logoImg from "../../assets/logo.png";
 
@@ -33,8 +34,8 @@ function AdminFarmers() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/admin/farmers",
+      const response = await axiosInstance.get(
+        "/api/admin/farmers",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -66,8 +67,8 @@ function AdminFarmers() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.put(
-        `http://localhost:4000/api/admin/farmers/${farmerId}/status`,
+      const response = await axiosInstance.put(
+        `/api/admin/farmers/${farmerId}/status`,
         { status },
         {
           headers: {

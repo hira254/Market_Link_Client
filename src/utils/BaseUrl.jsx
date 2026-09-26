@@ -1,11 +1,11 @@
-import React from 'react'
+import axios from "axios";
 
-const BaseUrl = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
 
-export default BaseUrl
+const axiosInstance = axios.create({
+    baseURL: import.meta.env.VITE_BASE_API_URL,
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
+export default axiosInstance;

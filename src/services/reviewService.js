@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:4000/api/reviews";
+const API_URL = "/api/reviews";
 
 // Add Review
 export const createReview = async (reviewData, token) => {
-  const response = await axios.post(
+  const response = await axiosInstance.post(
     API_URL,
     reviewData,
     {
@@ -19,7 +19,7 @@ export const createReview = async (reviewData, token) => {
 
 // Get reviews of a product
 export const getProductReviews = async (productId, token) => {
-  const response = await axios.get(
+  const response = await axiosInstance.get(
     `${API_URL}/product/${productId}`,
     {
       headers: {
@@ -33,7 +33,7 @@ export const getProductReviews = async (productId, token) => {
 
 // Get customer's reviews
 export const getMyReviews = async (token) => {
-  const response = await axios.get(
+  const response = await axiosInstance.get(
     `${API_URL}/my`,
     {
       headers: {
@@ -47,7 +47,7 @@ export const getMyReviews = async (token) => {
 
 // Delete customer's review
 export const deleteReview = async (reviewId, token) => {
-  const response = await axios.delete(
+  const response = await axiosInstance.delete(
     `${API_URL}/${reviewId}`,
     {
       headers: {
@@ -61,7 +61,7 @@ export const deleteReview = async (reviewId, token) => {
 
 // Farmer reviews
 export const getMyFarmerReviews = async (token) => {
-  const response = await axios.get(
+  const response = await axiosInstance.get(
     `${API_URL}/reviews`,
     {
       headers: {
@@ -75,7 +75,7 @@ export const getMyFarmerReviews = async (token) => {
 
 // Admin reviews
 export const getAllReviewsForAdmin = async (token) => {
-  const response = await axios.get(
+  const response = await axiosInstance.get(
     `${API_URL}/admin`,
     {
       headers: {
@@ -89,7 +89,7 @@ export const getAllReviewsForAdmin = async (token) => {
 
 // Admin delete review
 export const adminDeleteReview = async (reviewId, token) => {
-  const response = await axios.delete(
+  const response = await axiosInstance.delete(
     `${API_URL}/admin/${reviewId}`,
     {
       headers: {

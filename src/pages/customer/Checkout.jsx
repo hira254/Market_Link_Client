@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import Navbar from "../../components/Navbar";
 
 function Checkout() {
@@ -32,8 +33,8 @@ function Checkout() {
           return;
         }
 
-        const response = await axios.get(
-          "http://localhost:4000/api/cart",
+        const response = await axiosInstance.get(
+          "/api/cart",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -62,8 +63,8 @@ function Checkout() {
 
         if (!token) return;
 
-        const response = await axios.get(
-          "http://localhost:4000/api/customer/family",
+        const response = await axiosInstance.get(
+          "/api/customer/family",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -131,8 +132,8 @@ function Checkout() {
       console.log("ORDER ITEMS:", orderItems);
 
       // CREATE ORDER
-      const response = await axios.post(
-        "http://localhost:4000/api/orders",
+      const response = await axiosInstance.post(
+        "/api/orders",
         {
           items: orderItems,
           pickupDate,
@@ -171,8 +172,8 @@ function Checkout() {
       // ==========================================
       // CLEAR BACKEND CART
       // ==========================================
-      await axios.delete(
-        "http://localhost:4000/api/cart/clear",
+      await axiosInstance.delete(
+        "/api/cart/clear",
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import {
   ShoppingCart,
   Trash2,
@@ -30,8 +31,8 @@ function Cart() {
 
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/cart",
+      const response = await axiosInstance.get(
+        "/api/cart",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,8 +61,8 @@ function Cart() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.put(
-        `http://localhost:4000/api/cart/update/${cartItemId}`,
+      const response = await axiosInstance.put(
+        `/api/cart/update/${cartItemId}`,
         {
           quantity: newQuantity,
         },
@@ -82,7 +83,7 @@ function Cart() {
 
       alert(
         error.response?.data?.message ||
-          "Failed to update cart"
+        "Failed to update cart"
       );
     }
   };
@@ -94,8 +95,8 @@ function Cart() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.delete(
-        `http://localhost:4000/api/cart/remove/${cartItemId}`,
+      const response = await axiosInstance.delete(
+        `/api/cart/remove/${cartItemId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -113,7 +114,7 @@ function Cart() {
 
       alert(
         error.response?.data?.message ||
-          "Failed to remove item"
+        "Failed to remove item"
       );
     }
   };
@@ -125,8 +126,8 @@ function Cart() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.delete(
-        "http://localhost:4000/api/cart/clear",
+      const response = await axiosInstance.delete(
+        "/api/cart/clear",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -144,7 +145,7 @@ function Cart() {
 
       alert(
         error.response?.data?.message ||
-          "Failed to clear cart"
+        "Failed to clear cart"
       );
     }
   };
@@ -258,11 +259,11 @@ function Cart() {
                       Price: Rs. {product.price}
                     </p>
 
-                   <p className="font-semibold text-marketlink-earth-deep">
-  Subtotal: Rs.{" "}
-  {Number(item.product?.price || 0) *
-    Number(item.quantity || 0)}
-</p>
+                    <p className="font-semibold text-marketlink-earth-deep">
+                      Subtotal: Rs.{" "}
+                      {Number(item.product?.price || 0) *
+                        Number(item.quantity || 0)}
+                    </p>
                   </div>
                 </div>
 

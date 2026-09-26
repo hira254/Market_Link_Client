@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
@@ -69,7 +70,7 @@ function Markets() {
       setLoading(true);
       setError("");
 
-      const response = await axios.get("http://localhost:4000/api/markets");
+      const response = await axiosInstance.get("/api/markets");
 
       console.log("MARKET RESPONSE:", response.data);
       console.log("MARKETS WITH COORDINATES:", response.data.markets);

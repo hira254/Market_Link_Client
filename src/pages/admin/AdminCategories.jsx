@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { Link } from "react-router-dom";
 import logoImg from "../../assets/logo.png";
 
@@ -42,8 +43,8 @@ const AdminCategories = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:4000/api/categories",
+      const response = await axiosInstance.get(
+        "/api/categories",
         config
       );
 
@@ -74,16 +75,16 @@ const AdminCategories = () => {
       setError("");
 
       if (editingId) {
-        await axios.put(
-          `http://localhost:4000/api/categories/${editingId}`,
+        await axiosInstance.put(
+          `/api/categories/${editingId}`,
           form,
           config
         );
 
         setMessage("Category updated successfully");
       } else {
-        await axios.post(
-          "http://localhost:4000/api/categories",
+        await axiosInstance.post(
+          "/api/categories",
           form,
           config
         );
@@ -130,8 +131,8 @@ const AdminCategories = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(
-        `http://localhost:4000/api/categories/${id}`,
+      await axiosInstance.delete(
+        `/api/categories/${id}`,
         config
       );
 

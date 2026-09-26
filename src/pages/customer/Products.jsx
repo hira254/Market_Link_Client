@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import Navbar from "../../components/Navbar";
 import { Link } from "react-router-dom";
 
@@ -27,8 +28,8 @@ function Products() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/products",
+      const response = await axiosInstance.get(
+        "/api/products",
         {
           headers: {
             Authorization: `Bearer ${token}`,

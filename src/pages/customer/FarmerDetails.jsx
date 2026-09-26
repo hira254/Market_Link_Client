@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { 
@@ -50,8 +51,8 @@ function FarmerDetails() {
 
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:4000/api/farmers",
+      const response = await axiosInstance.get(
+        "/api/farmers",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -95,8 +96,8 @@ function FarmerDetails() {
 
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        `http://localhost:4000/api/farmers/${id}/stock`,
+      const response = await axiosInstance.get(
+        `/api/farmers/${id}/stock`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -124,8 +125,8 @@ function FarmerDetails() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        `http://localhost:4000/api/farmers/${id}/reviews`,
+      const response = await axiosInstance.get(
+        `/api/farmers/${id}/reviews`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import Navbar from "../../components/Navbar";
 import ProductReviews from "../../components/reviews/ProductReviews";
 import { ArrowLeft, ShoppingCart, Star, CheckCircle, XCircle, Minus, Plus, ShoppingBag } from "lucide-react";
@@ -56,8 +57,8 @@ const findCompletedOrder = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        `http://localhost:4000/api/products/${id}`,
+      const response = await axiosInstance.get(
+        `/api/products/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -77,8 +78,8 @@ const findCompletedOrder = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        `http://localhost:4000/api/reviews/product/${id}`,
+      const response = await axiosInstance.get(
+        `/api/reviews/product/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -128,8 +129,8 @@ const handleAddToCart = async () => {
       return;
     }
 
-    const response = await axios.post(
-      "http://localhost:4000/api/cart/add",
+    const response = await axiosInstance.post(
+      "/api/cart/add",
       {
         product: product._id,
         quantity: quantity,

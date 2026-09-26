@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../utils/BaseUrl";
+
 import Navbar from "../../components/Navbar";
 import { Store, MapPin, Clock, Calendar, ArrowLeft, Sprout } from "lucide-react";
 
@@ -20,10 +21,10 @@ function MarketDetails() {
       const token = localStorage.getItem("token");
       const headers = { Authorization: `Bearer ${token}` };
 
-      const marketResponse = await axios.get(`http://localhost:4000/api/markets/${id}`, { headers });
+      const marketResponse = await axiosInstance.get(`/api/markets/${id}`, { headers });
       setMarket(marketResponse.data.market);
 
-      const farmersResponse = await axios.get(`http://localhost:4000/api/markets/${id}/farmers`, { headers });
+      const farmersResponse = await axiosInstance.get(`/api/markets/${id}/farmers`, { headers });
       setFarmers(farmersResponse.data.farmers || []);
     } catch (error) {
       console.log("MARKET DETAILS ERROR:", error.response?.data || error.message);
