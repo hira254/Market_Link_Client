@@ -1,10 +1,12 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 // Auth
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 
-// Common
+// Common Components / Layouts
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 import CustomerNotifications from "./pages/customer/CustomerNotifications";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -53,275 +55,212 @@ import "react-toastify/dist/ReactToastify.css";
 import CustomerFamilySharing from "./pages/customer/CustomerFamilySharing";
 
 import ProductReviews from "./components/reviews/ProductReviews";
+
+// 1. PUBLIC LAYOUT (Navbar top par hoga)
+const PublicLayout = () => {
+  return (
+    <div className="min-h-screen flex flex-col bg-[#FBF9F5]">
+      <Navbar />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+    </div>
+  );
+};
+
+// 2. CUSTOMER DASHBOARD LAYOUT (Sidebar left par hoga)
+const CustomerLayout = () => {
+  return (
+    <div className="flex min-h-screen bg-[#FBF9F5]">
+      <Sidebar />
+      <main className="flex-1 min-w-0 overflow-y-auto">
+        <Outlet />
+      </main>
+    </div>
+  );
+};
+
 function App() {
   return (
-     <>
-    <Routes>
+    <>
+      <Routes>
+        {/* ================= PUBLIC ROUTES WITH NAVBAR ================= */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/product/review" element={<ProductReviews />} />
 
+          {/* Public Customer Browsing */}
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/farmers" element={<Farmers />} />
+          <Route path="/farmers/:id" element={<FarmerDetails />} />
+          <Route path="/markets" element={<Markets />} />
+          <Route path="/markets/:id" element={<MarketDetails />} />
+        </Route>
 
+        {/* Auth Pages (Without Navbar/Sidebar) */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
 
-<Route path="/customer/family" element={<CustomerFamilySharing />} />
-      {/* ================= PUBLIC ================= */}
-<Route
-  path="/notifications"
-  element={<CustomerNotifications />}
-/>
-      <Route path="/" element={<Home />} />
- <Route path="/product/review" element={<ProductReviews />} />
-      <Route path="/about" element={<About />} />
-
-      <Route path="/contact" element={<Contact />} />
-
-      <Route path="/register" element={<Register />} />
-
-      <Route path="/login" element={<Login />} />
-
-
-      {/* ================= PUBLIC CUSTOMER BROWSING ================= */}
-<Route path="/profile" element={<CustomerProfile />} />
-      {/* Products */}
-      <Route
-        path="/products"
-        element={<Products />}
-      />
-
-      {/* Product Details */}
-      <Route
-        path="/products/:id"
-        element={<ProductDetails />}
-      />
-
-      {/* Farmers */}
-      <Route
-        path="/farmers"
-        element={<Farmers />}
-      />
-
-      {/* Farmer Details */}
-      <Route
-        path="/farmers/:id"
-        element={<FarmerDetails />}
-      />
-
-      {/* Markets */}
-      <Route
-        path="/markets"
-        element={<Markets />}
-      />
-
-      {/* Market Details */}
-      <Route
-        path="/markets/:id"
-        element={<MarketDetails />}
-      />
-
-
-      {/* ================= CUSTOMER PROTECTED ================= */}
-
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <CustomerDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/cart"
-        element={
-          <ProtectedRoute>
-            <Cart />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/checkout"
-        element={
-          <ProtectedRoute>
-            <Checkout />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/orders"
-        element={
-          <ProtectedRoute>
-            <Orders />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/favorites"
-        element={
-          <ProtectedRoute>
-            <Favorites />
-          </ProtectedRoute>
-        }
-      />
-
-
-      {/* ================= FARMER PROTECTED ================= */}
-
-      <Route
-        path="/farmer"
-        element={
-          <ProtectedRoute>
-            <FarmerDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/farmer/dashboard"
-        element={
-          <ProtectedRoute>
-            <FarmerDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-    <Route
-  path="/farmer/profile"
-
-  element={ <ProtectedRoute><FarmerProfile /></ProtectedRoute>}
-/>
-
-      <Route
-        path="/farmer/products"
-        element={
-          <ProtectedRoute>
-            <FarmerProducts />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/farmer/orders"
-        element={
-          <ProtectedRoute>
-            <FarmerOrders />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/farmer/history"
-        element={
-          <ProtectedRoute>
-            <FarmerOrderHistory />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/farmer/reviews"
-        element={
-          <ProtectedRoute>
-            <FarmerReviews />
-          </ProtectedRoute>
-        }
-      />
-
-
-      {/* ================= ADMIN PROTECTED ================= */}
-
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/dashboard"
-        element={
-          <ProtectedRoute>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/farmers"
-        element={
-          <ProtectedRoute>
-            <AdminFarmers />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/customers"
-        element={
-          <ProtectedRoute>
-            <AdminCustomers />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/markets"
-        element={
-          <ProtectedRoute>
-            <AdminMarkets />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/products"
-        element={
-          <ProtectedRoute>
-            <AdminProducts />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/reviews"
-        element={
-          <ProtectedRoute>
-            <AdminReviews />
-          </ProtectedRoute>
-        }
-      />
-  <Route
-        path="/admin/reports"
-        element={
-          <ProtectedRoute>
-            <AdminReports />
-          </ProtectedRoute>
-        }
-      />
+        {/* ================= CUSTOMER PROTECTED ROUTES WITH SIDEBAR ================= */}
         <Route
-        path="/admin/categories"
-        element={
-          <ProtectedRoute>
-            <AdminCategories />
-          </ProtectedRoute>
-        }
-      />
+          element={
+            <ProtectedRoute>
+              <CustomerLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/dashboard" element={<CustomerDashboard />} />
+          <Route path="/profile" element={<CustomerProfile />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/notifications" element={<CustomerNotifications />} />
+          <Route path="/customer/family" element={<CustomerFamilySharing />} />
+        </Route>
 
-      {/* ================= FALLBACK ================= */}
+        {/* ================= FARMER PROTECTED ================= */}
+        <Route
+          path="/farmer"
+          element={
+            <ProtectedRoute>
+              <FarmerDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/farmer/dashboard"
+          element={
+            <ProtectedRoute>
+              <FarmerDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/farmer/profile"
+          element={
+            <ProtectedRoute>
+              <FarmerProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/farmer/products"
+          element={
+            <ProtectedRoute>
+              <FarmerProducts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/farmer/orders"
+          element={
+            <ProtectedRoute>
+              <FarmerOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/farmer/history"
+          element={
+            <ProtectedRoute>
+              <FarmerOrderHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/farmer/reviews"
+          element={
+            <ProtectedRoute>
+              <FarmerReviews />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="*"
-        element={<Navigate to="/" replace />}
-      />
+        {/* ================= ADMIN PROTECTED ================= */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/farmers"
+          element={
+            <ProtectedRoute>
+              <AdminFarmers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/customers"
+          element={
+            <ProtectedRoute>
+              <AdminCustomers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/markets"
+          element={
+            <ProtectedRoute>
+              <AdminMarkets />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/products"
+          element={
+            <ProtectedRoute>
+              <AdminProducts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/reviews"
+          element={
+            <ProtectedRoute>
+              <AdminReviews />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute>
+              <AdminReports />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/categories"
+          element={
+            <ProtectedRoute>
+              <AdminCategories />
+            </ProtectedRoute>
+          }
+        />
 
-    </Routes>
-    <ToastContainer
-      position="top-right"
-      autoClose={3000}
-    />
-    <> <AIChatbot /> </>
-   </>
+        {/* ================= FALLBACK ================= */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+
+      <ToastContainer position="top-right" autoClose={3000} />
+      <AIChatbot />
+    </>
   );
 }
 
