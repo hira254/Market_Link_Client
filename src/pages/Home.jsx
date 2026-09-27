@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import heroBanner from "../assets/hero-banner.jpg";
+import { useEffect, useState } from "react";
+import axiosInstance from "../utils/BaseUrl";
 
 import {
   ArrowRight,
@@ -27,12 +29,31 @@ function Home() {
     { title: "Spices & Herbs", desc: "Aromatic & natural", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&q=80" },
   ];
 
-  const featuredProducts = [
-    { id: 1, name: "Fresh Tomatoes", farm: "Meadow Brook Farm", dist: "2.5 km away", badge: "Harvested Today", tag: "Vegetables", price: "$1.99", unit: "per kg", rating: 4.9, image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300&q=80" },
-    { id: 2, name: "Organic Apples", farm: "Sunny Orchard Co.", dist: "5.0 km away", badge: "Harvested Yesterday", tag: "Organic", price: "$2.49", unit: "per kg", rating: 4.8, image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=300&q=80" },
-    { id: 3, name: "Fresh Carrots", farm: "Meadow Brook Farm", dist: "2.5 km away", badge: "Harvested Today", tag: "Vegetables", price: "$1.49", unit: "per kg", rating: 4.7, image: "https://images.unsplash.com/photo-1598170845058-12ef4a457939?w=300&q=80" },
-    { id: 4, name: "Green Lettuce", farm: "Willow Creek", dist: "1.2 km away", badge: "Harvested Today", tag: "Organic", price: "$1.29", unit: "per head", rating: 5.0, image: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=300&q=80" },
-  ];
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+const [loadingProducts, setLoadingProducts] = useState(true);
+
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const response = await axiosInstance.get("/api/products");
+
+      console.log("HOME PRODUCTS:", response.data);
+
+      const products = response.data?.products || response.data || [];
+
+      setFeaturedProducts(products);
+    } catch (error) {
+      console.error(
+        "HOME PRODUCTS ERROR:",
+        error.response?.data || error.message
+      );
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+
+  fetchProducts();
+}, []);
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-slate-800 font-sans antialiased selection:bg-amber-400 selection:text-[#213218]">
@@ -157,83 +178,149 @@ function Home() {
       </section>
 
       {/* ================= FEATURED PRODUCTS ================= */}
-      <section className="py-16 bg-slate-100/70 border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#42612F]">
-                Featured Products
+ 
+<section className="py-16 bg-slate-100/70 border-y border-slate-200/80">
+  <div className="max-w-7xl mx-auto px-6">
+
+    <div className="flex items-end justify-between mb-10">
+      <div>
+        <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#42612F]">
+          Featured Products
+        </span>
+
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mt-0.5">
+          Best-selling fresh picks
+        </h2>
+      </div>
+
+      <Link
+        to="/products"
+        className="text-xs font-bold text-[#42612F] hover:text-[#2d4320] flex items-center gap-1 group transition-colors"
+      >
+        View All Products
+        <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+      </Link>
+    </div>
+
+    {/* Loading */}
+    {loadingProducts && (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map((item) => (
+          <div
+            key={item}
+            className="h-80 bg-white rounded-2xl animate-pulse border border-slate-200"
+          />
+        ))}
+      </div>
+    )}
+
+    {/* Products */}
+    {!loadingProducts && featuredProducts.length > 0 && (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+
+        {featuredProducts.map((prod) => (
+          <div
+            key={prod._id}
+            className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
+          >
+
+            {/* Product Image */}
+            <div className="relative h-48 bg-slate-100 overflow-hidden">
+
+              <img
+                src={prod.image}
+                alt={prod.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+              />
+
+              {/* Category */}
+              <span className="absolute top-3 left-3 bg-[#324B25]/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">
+                {prod.category}
               </span>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mt-0.5">
-                Best-selling fresh picks
-              </h2>
+
+              {/* Favorite */}
+              <button
+                aria-label="Add to favorites"
+                className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-md rounded-full hover:bg-white text-slate-600 hover:text-red-500 transition-colors shadow-sm"
+              >
+                <Heart className="w-3.5 h-3.5" />
+              </button>
+
             </div>
 
-            <Link
-              to="/products"
-              className="text-xs font-bold text-[#42612F] hover:text-[#2d4320] flex items-center gap-1 group transition-colors"
-            >
-              View All Products
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </div>
+            {/* Product Info */}
+            <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {featuredProducts.map((prod) => (
-              <div
-                key={prod.id}
-                className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
-              >
-                <div className="relative h-48 bg-slate-100 overflow-hidden">
-                  <img
-                    src={prod.image}
-                    alt={prod.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                  />
-                  <span className="absolute top-3 left-3 bg-[#324B25]/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">
-                    {prod.tag}
-                  </span>
-                  <button
-                    aria-label="Add to favorites"
-                    className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-md rounded-full hover:bg-white text-slate-600 hover:text-red-500 transition-colors shadow-sm"
-                  >
-                    <Heart className="w-3.5 h-3.5" />
-                  </button>
-                  <div className="absolute bottom-3 left-3 bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-medium px-2.5 py-0.5 rounded-md">
-                    {prod.badge}
+              <div>
+
+                <div className="flex items-center justify-between">
+
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-[#42612F] transition-colors">
+                    {prod.name}
+                  </h3>
+
+                  <div className="flex items-center gap-1 text-[11px] font-bold text-slate-700">
+                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+
+                    {prod.rating || "New"}
                   </div>
+
                 </div>
 
-                <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-bold text-slate-900 text-sm group-hover:text-[#42612F] transition-colors">
-                        {prod.name}
-                      </h3>
-                      <div className="flex items-center gap-1 text-[11px] font-bold text-slate-700">
-                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                        {prod.rating}
-                      </div>
-                    </div>
-                    <p className="text-xs text-slate-500 mt-1">{prod.farm} • {prod.dist}</p>
-                  </div>
+                {/* Farmer */}
+                <p className="text-xs text-slate-500 mt-1">
+                  {prod.farmer?.name || "Local Farmer"}
+                </p>
 
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <div>
-                      <span className="text-lg font-black text-slate-900">{prod.price}</span>
-                      <span className="text-[10px] text-slate-500 font-medium ml-1">{prod.unit}</span>
-                    </div>
-
-                    <button className="px-3.5 py-2 rounded-lg bg-[#42612F] hover:bg-[#344E25] active:scale-95 text-white text-xs font-bold transition-all shadow-sm">
-                      Add to cart
-                    </button>
-                  </div>
-                </div>
               </div>
-            ))}
+
+              {/* Price */}
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+
+                <div>
+                  <span className="text-lg font-black text-slate-900">
+                    Rs. {prod.price}
+                  </span>
+
+                  <span className="text-[10px] text-slate-500 font-medium ml-1">
+                    {prod.unit || "per unit"}
+                  </span>
+                </div>
+
+                <button
+                  className="px-3.5 py-2 rounded-lg bg-[#42612F] hover:bg-[#344E25] active:scale-95 text-white text-xs font-bold transition-all shadow-sm"
+                >
+                  Add to cart
+                </button>
+
+              </div>
+
+            </div>
+
           </div>
-        </div>
-      </section>
+        ))}
+
+      </div>
+    )}
+
+    {/* No Products */}
+    {!loadingProducts && featuredProducts.length === 0 && (
+      <div className="text-center py-12">
+        <ShoppingBag className="mx-auto w-10 h-10 text-slate-400 mb-3" />
+
+        <p className="text-sm font-semibold text-slate-600">
+          No products available yet.
+        </p>
+
+        <p className="text-xs text-slate-400 mt-1">
+          Products added by farmers will appear here.
+        </p>
+      </div>
+    )}
+
+  </div>
+</section>
+
 
       {/* ================= PANELS LINK SECTION ================= */}
       <section className="py-16 max-w-7xl mx-auto px-6">
