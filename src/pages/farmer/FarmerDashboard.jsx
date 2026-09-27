@@ -474,7 +474,7 @@ function FarmerDashboard() {
             </h3>
 
             <Link
-              to="/farmer/products/new"
+              to="/farmer/FarmerProducts"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold transition"
             >
               <Plus className="w-3.5 h-3.5" />
