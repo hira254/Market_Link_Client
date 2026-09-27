@@ -128,42 +128,7 @@ function ProductDetails() {
   // FETCH REVIEWS
   // =========================
 
-const fetchReviews = async () => {
-  try {
-    const response = await axiosInstance.get(
-      `/api/reviews/product/${id}`
-    );
-
-    console.log("REVIEWS RESPONSE:", response.data);
-
-    setReviews(response.data.reviews || []);
-    setTotalReviews(response.data.count || 0);
-
-    // Calculate average rating
-    if (response.data.reviews?.length > 0) {
-      const totalRating = response.data.reviews.reduce(
-        (sum, review) => sum + Number(review.rating || 0),
-        0
-      );
-
-      const average =
-        totalRating / response.data.reviews.length;
-
-      setAverageRating(average.toFixed(1));
-    } else {
-      setAverageRating(0);
-    }
-  } catch (error) {
-    console.error(
-      "Failed to fetch reviews:",
-      error.response?.data || error.message
-    );
-
-    setReviews([]);
-    setTotalReviews(0);
-    setAverageRating(0);
-  }
-};
+const fetchReviews = async () => { try { const response = await axiosInstance.get( `/api/reviews/product/${id}` ); console.log("REVIEWS RESPONSE:", response.data); setReviews(response.data.reviews || []); setTotalReviews(response.data.count || 0); if (response.data.reviews?.length > 0) { const totalRating = response.data.reviews.reduce( (sum, review) => sum + Number(review.rating || 0), 0 ); const average = totalRating / response.data.reviews.length; setAverageRating(average.toFixed(1)); } else { setAverageRating(0); } } catch (error) { console.error( "Failed to fetch reviews:", error.response?.data || error.message ); setReviews([]); setTotalReviews(0); setAverageRating(0); } };
   // =========================
   // QUANTITY
   // =========================
