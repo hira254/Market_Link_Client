@@ -41,51 +41,58 @@ function ProductDetails() {
   // =========================
   // FIND COMPLETED ORDER
   // =========================
-  const findCompletedOrder = () => {
-    try {
-      const savedOrders =
-        JSON.parse(localStorage.getItem("orders")) || [];
+const findCompletedOrder = async () => {
+  try {
+    const token = localStorage.getItem("token");
 
-      console.log("SAVED ORDERS:", savedOrders);
-      console.log("CURRENT PRODUCT ID:", id);
+    if (!token) {
+      console.log("NO TOKEN - USER NOT LOGGED IN");
+      setOrderId(null);
+      return;
+    }
 
-      const completedOrder = savedOrders.find(
-        (order) =>
-          order.status === "completed" &&
-          order.items?.some(
-            (item) =>
-              item.product === id ||
-              item.product?._id === id
-          )
-      );
+    const response = await axiosInstance.get("/api/orders", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-      console.log("COMPLETED ORDER:", completedOrder);
+    console.log("MY ORDERS RESPONSE:", response.data);
+    console.log("CURRENT PRODUCT ID:", id);
 
-      if (completedOrder) {
-        const foundOrderId =
-          completedOrder._id ||
-          completedOrder.id;
+    const orders = response.data?.orders || [];
 
-        console.log("FOUND ORDER ID:", foundOrderId);
+    const completedOrder = orders.find(
+      (order) =>
+        order.status === "completed" &&
+        order.items?.some(
+          (item) =>
+            item.product?._id?.toString() === id ||
+            item.product?.toString() === id
+        )
+    );
 
-        setOrderId(foundOrderId);
-      } else {
-        console.log(
-          "NO COMPLETED ORDER FOUND FOR THIS PRODUCT"
-        );
+    console.log("COMPLETED ORDER:", completedOrder);
 
-        setOrderId(null);
-      }
-    } catch (error) {
-      console.error(
-        "ORDER ID ERROR:",
-        error
-      );
+    if (completedOrder) {
+      const foundOrderId = completedOrder._id;
 
+      console.log("FOUND ORDER ID:", foundOrderId);
+
+      setOrderId(foundOrderId);
+    } else {
+      console.log("NO COMPLETED ORDER FOUND FOR THIS PRODUCT");
       setOrderId(null);
     }
-  };
+  } catch (error) {
+    console.error(
+      "ORDER ID ERROR:",
+      error.response?.data || error.message
+    );
 
+    setOrderId(null);
+  }
+};
   // =========================
   // FETCH PRODUCT
   // =========================
