@@ -14,17 +14,23 @@ function ProductReviews({ productId, orderId }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const fetchReviews = async () => {
-    try {
-      const data = await getProductReviews(productId, token);
-      setReviews(data.reviews || []);
-    } catch (error) {
-      console.error(
-        "Failed to fetch reviews:",
-        error.response?.data || error.message
-      );
-    }
-  };
+const fetchReviews = async () => {
+  try {
+    const data = await getProductReviews(productId);
+    setReviews(data.reviews || []);
+  } catch (error) {
+    console.error(
+      "Failed to fetch reviews:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+useEffect(() => {
+  if (productId) {
+    fetchReviews();
+  }
+}, [productId]);
 
   useEffect(() => {
     if (productId && token) {

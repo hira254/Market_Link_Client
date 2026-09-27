@@ -1,6 +1,8 @@
-import axios from "axios";
+import axiosInstance from "../utils/BaseUrl";
 
 const API_URL = "/api/reviews";
+
+// ================= CUSTOMER =================
 
 // Add Review
 export const createReview = async (reviewData, token) => {
@@ -18,14 +20,10 @@ export const createReview = async (reviewData, token) => {
 };
 
 // Get reviews of a product
-export const getProductReviews = async (productId, token) => {
+// PUBLIC API — token is not required
+export const getProductReviews = async (productId) => {
   const response = await axiosInstance.get(
-    `${API_URL}/product/${productId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    `${API_URL}/product/${productId}`
   );
 
   return response.data;
@@ -59,7 +57,10 @@ export const deleteReview = async (reviewId, token) => {
   return response.data;
 };
 
-// Farmer reviews
+
+// ================= FARMER =================
+
+// Get farmer reviews
 export const getMyFarmerReviews = async (token) => {
   const response = await axiosInstance.get(
     `${API_URL}/reviews`,
@@ -73,7 +74,10 @@ export const getMyFarmerReviews = async (token) => {
   return response.data;
 };
 
-// Admin reviews
+
+// ================= ADMIN =================
+
+// Get all reviews
 export const getAllReviewsForAdmin = async (token) => {
   const response = await axiosInstance.get(
     `${API_URL}/admin`,
