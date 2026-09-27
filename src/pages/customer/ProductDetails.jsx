@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axiosInstance from "../../utils/BaseUrl";
-
 import Navbar from "../../components/Navbar";
 import ProductReviews from "../../components/reviews/ProductReviews";
 
@@ -128,67 +127,43 @@ function ProductDetails() {
   // =========================
   // FETCH REVIEWS
   // =========================
-  const fetchReviews = async () => {
-    try {
-      const token =
-        localStorage.getItem("token");
 
-      const response =
-        await axiosInstance.get(
-          `/api/reviews/product/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+const fetchReviews = async () => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/reviews/product/${id}`
+    );
 
-      console.log(
-        "REVIEWS RESPONSE:",
-        response.data
+    console.log("REVIEWS RESPONSE:", response.data);
+
+    setReviews(response.data.reviews || []);
+    setTotalReviews(response.data.count || 0);
+
+    // Calculate average rating
+    if (response.data.reviews?.length > 0) {
+      const totalRating = response.data.reviews.reduce(
+        (sum, review) => sum + Number(review.rating || 0),
+        0
       );
 
-      const reviewList =
-        response.data.reviews || [];
+      const average =
+        totalRating / response.data.reviews.length;
 
-      setReviews(reviewList);
-
-      setTotalReviews(
-        response.data.count ||
-          reviewList.length
-      );
-
-      if (reviewList.length > 0) {
-        const total =
-          reviewList.reduce(
-            (sum, review) =>
-              sum +
-              Number(
-                review.rating || 0
-              ),
-            0
-          );
-
-        setAverageRating(
-          (total /
-            reviewList.length).toFixed(1)
-        );
-      } else {
-        setAverageRating(0);
-      }
-    } catch (error) {
-      console.log(
-        "REVIEWS ERROR:",
-        error.response?.data ||
-          error.message
-      );
-
-      setReviews([]);
+      setAverageRating(average.toFixed(1));
+    } else {
       setAverageRating(0);
-      setTotalReviews(0);
     }
-  };
+  } catch (error) {
+    console.error(
+      "Failed to fetch reviews:",
+      error.response?.data || error.message
+    );
 
+    setReviews([]);
+    setTotalReviews(0);
+    setAverageRating(0);
+  }
+};
   // =========================
   // QUANTITY
   // =========================
