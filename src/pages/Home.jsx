@@ -1,419 +1,241 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import heroBanner from "../assets/hero-banner.jpg";
-import { useEffect, useState } from "react";
+import Footer from "../components/Footer";
 import axiosInstance from "../utils/BaseUrl";
 
-import {
-  ArrowRight,
-  CheckCircle2,
-  ShieldCheck,
-  Tag,
-  Users,
-  ShoppingBag,
-  Store,
-  Heart,
-  Star,
-  Sparkles,
-  ChevronRight,
-} from "lucide-react";
-import Footer from "../components/Footer";
+// Standard Fallback Assets
+import heroBanner from "../assets/hero-banner.jpg";
 
-function Home() {
+export default function Home() {
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
   const categories = [
-    { title: "Fresh Fruits", desc: "Picked daily", image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=300&q=80" },
-    { title: "Vegetables", desc: "Healthy & organic", image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&q=80" },
-    { title: "Dairy Products", desc: "100% Farm fresh", image: "https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?w=300&q=80" },
-    { title: "Organic Honey", desc: "Pure & natural", image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=300&q=80" },
-    { title: "Grains & Pulses", desc: "Nutritious & healthy", image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&q=80" },
-    { title: "Spices & Herbs", desc: "Aromatic & natural", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&q=80" },
+    { id: "1", name: "Fresh Fruits", subtitle: "Picked daily", image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=300&q=80" },
+    { id: "2", name: "Vegetables", subtitle: "Healthy & organic", image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&q=80" },
+    { id: "3", name: "Dairy Products", subtitle: "100% Farm fresh", image: "https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?w=300&q=80" },
+    { id: "4", name: "Organic Honey", subtitle: "Pure & natural", image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=300&q=80" },
+    { id: "5", name: "Grains & Pulses", subtitle: "Nutritious & healthy", image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&q=80" },
+    { id: "6", name: "Spices & Herbs", subtitle: "Aromatic & natural", image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&q=80" },
   ];
 
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-const [loadingProducts, setLoadingProducts] = useState(true);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axiosInstance.get("/api/products");
+        const products = response.data?.products || response.data || [];
+        setFeaturedProducts(products);
+      } catch (error) {
+        console.error("HOME PRODUCTS ERROR:", error.response?.data || error.message);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
 
-useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const response = await axiosInstance.get("/api/products");
-
-      console.log("HOME PRODUCTS:", response.data);
-
-      const products = response.data?.products || response.data || [];
-
-      setFeaturedProducts(products);
-    } catch (error) {
-      console.error(
-        "HOME PRODUCTS ERROR:",
-        error.response?.data || error.message
-      );
-    } finally {
-      setLoadingProducts(false);
-    }
-  };
-
-  fetchProducts();
-}, []);
+    fetchProducts();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-slate-800 font-sans antialiased selection:bg-amber-400 selection:text-[#213218]">
+    <div className="min-h-screen bg-white text-slate-800 font-sans antialiased">
       <Navbar />
 
-      {/* ================= HERO SECTION ================= */}
-     {/* ================= HERO SECTION ================= */}
-<section className="relative bg-[#1E3016] text-white overflow-hidden shadow-2xl z-10">
-  {/* Background Banner with Overlay & Multi-layered Shadows */}
-  <div className="absolute inset-0 z-0">
-    <img
-      src={heroBanner}
-      alt="Farm Banner"
-      className="w-full h-full object-cover object-center opacity-35 mix-blend-overlay scale-105"
-    />
-    
-    {/* Left-to-Right Shadow & Dark Overlay */}
-    <div className="absolute inset-0 bg-gradient-to-r from-[#12200D] via-[#1C3014]/90 to-transparent" />
-    
-    {/* Top & Bottom Cinematic Shadow (Bottom Edge Fade) */}
-    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#12200D]" />
-  </div>
+      {/* Hero Section (Clean Light/White Background) */}
+      <section className="relative overflow-hidden bg-white py-12 lg:py-16 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="space-y-6">
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-700">
+                <span>🌿</span> Fresh • Organic • Local
+              </span>
 
-  <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-    <div className="lg:col-span-8 space-y-6">
-      <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#3D5B2C]/80 backdrop-blur-md text-amber-300 text-xs font-bold uppercase tracking-widest border border-amber-400/20 shadow-md">
-        <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-        Fresh • Organic • Local
-      </span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight tracking-tight">
+                Fresh Produce <br />
+                <span className="text-slate-800">Direct from Local Farmers</span>
+              </h1>
 
-      <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.1] drop-shadow-md">
-        Fresh Produce <br />
-        <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-          Direct from Local Farmers
-        </span>
-      </h1>
+              <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-xl">
+                Bring the farm closer to your table. Discover fresh vegetables, fruits, and everyday essentials sourced directly from local farmers near you.
+              </p>
 
-      <p className="text-base md:text-lg text-slate-200 max-w-2xl leading-relaxed font-normal drop-shadow">
-        Bring the farm closer to your table. Discover fresh vegetables, fruits, and everyday essentials sourced directly from local farmers near you.
-      </p>
+              <div className="flex flex-wrap gap-4 pt-2">
+                <Link
+                  to="/products"
+                  className="px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-sm transition-all active:scale-95"
+                >
+                  🛒 Shop Fresh Produce →
+                </Link>
+                <Link
+                  to="/markets"
+                  className="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-900 font-bold text-sm shadow-sm transition-all active:scale-95"
+                >
+                  🏪 Explore Markets →
+                </Link>
+              </div>
 
-      <div className="flex flex-wrap items-center gap-4 pt-3">
-        <Link
-          to="/products"
-          className="px-7 py-4 rounded-xl bg-[#4A6E35] hover:bg-[#3D5C2C] text-white font-bold text-sm flex items-center gap-2.5 shadow-xl shadow-black/40 hover:-translate-y-0.5 transition-all duration-200 border border-[#628F48]"
-        >
-          Shop Fresh Produce
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-
-        <Link
-          to="/markets"
-          className="px-7 py-4 rounded-xl bg-white/90 hover:bg-white text-[#1C2C14] font-bold text-sm transition-all duration-200 shadow-lg shadow-black/20 hover:-translate-y-0.5 backdrop-blur-sm"
-        >
-          Explore Markets
-        </Link>
-      </div>
-
-      {/* Feature Badges with Floating Cards & Drop Shadow */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8 max-w-3xl">
-        {[
-          { title: "Organic", sub: "Fresh & Natural", icon: CheckCircle2 },
-          { title: "Local Farmers", sub: "Support Local", icon: Users },
-          { title: "Fair Prices", sub: "Direct Sourcing", icon: Tag },
-          { title: "Reliable", sub: "Fast Delivery", icon: ShieldCheck },
-        ].map((item, idx) => (
-          <div
-            key={idx}
-            className="bg-black/30 backdrop-blur-md p-3.5 rounded-xl border border-white/20 shadow-lg flex items-center gap-3 transition-transform duration-200 hover:bg-black/40 hover:scale-[1.02]"
-          >
-            <item.icon className="w-5 h-5 text-amber-400 shrink-0 drop-shadow" />
-            <div>
-              <div className="text-xs font-bold text-white">{item.title}</div>
-              <div className="text-[10px] text-slate-300">{item.sub}</div>
+              {/* Feature Badges */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6">
+                {[
+                  ["🌱", "Organic", "Fresh & natural"],
+                  ["👨‍🌾", "Local Farmers", "Support local"],
+                  ["✓", "Fair Prices", "Best value"],
+                  ["📍", "Reliable", "Market pickup"],
+                ].map(([icon, title, text]) => (
+                  <div key={title} className="rounded-xl border border-slate-200 bg-slate-50/50 p-3 flex items-center gap-2.5">
+                    <span className="text-xl">{icon}</span>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-900">{title}</h4>
+                      <p className="text-[10px] text-slate-500">{text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
 
-  {/* Smooth Curved Shadow Separator at Bottom */}
-  <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-[#FAFAFA] to-transparent pointer-events-none" />
-</section>
-
-      {/* ================= CATEGORIES SECTION ================= */}
-      <section className="py-14 max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#42612F]">
-              Explore Categories
-            </span>
-            <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mt-0.5">
-              Shop by Freshness
-            </h2>
+            {/* Banner Image */}
+            <div className="relative h-72 sm:h-96 lg:h-[420px] rounded-3xl overflow-hidden border border-slate-200">
+              <img
+                src={heroBanner}
+                alt="Local farmer"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80";
+                }}
+              />
+            </div>
           </div>
         </div>
+      </section>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {categories.map((cat, idx) => (
-            <div
-              key={idx}
-              className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer flex flex-col justify-between"
+      {/* Categories Bar */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-xs">
+          {categories.map((c) => (
+            <Link
+              to={`/products?category=${c.name}`}
+              key={c.id}
+              className="group overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 p-2 text-center transition hover:-translate-y-1 hover:shadow-md hover:bg-white"
             >
-              <div className="h-32 overflow-hidden bg-slate-100 relative">
+              <div className="h-24 overflow-hidden rounded-lg bg-slate-200 mb-2">
                 <img
-                  src={cat.image}
-                  alt={cat.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                  src={c.image}
+                  alt={c.name}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-              <div className="p-3.5 text-center bg-white">
-                <h4 className="text-xs font-bold text-slate-800 group-hover:text-[#42612F] transition-colors">
-                  {cat.title}
-                </h4>
-                <p className="text-[10px] text-slate-500 mt-0.5 font-medium">{cat.desc}</p>
-              </div>
-            </div>
+              <h3 className="text-xs font-bold text-slate-900">{c.name}</h3>
+              <p className="text-[10px] text-slate-500 mt-0.5">{c.subtitle}</p>
+            </Link>
           ))}
         </div>
       </section>
 
-      {/* ================= FEATURED PRODUCTS ================= */}
- 
-<section className="py-16 bg-slate-100/70 border-y border-slate-200/80">
-  <div className="max-w-7xl mx-auto px-6">
+      {/* Quick Navigation Links */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Explore & Help</span>
+              <h2 className="text-xl font-extrabold text-slate-900">Everything important, right here.</h2>
+            </div>
+            <p className="text-xs text-slate-500 max-w-md">Use these quick links for support, guidance, and project details.</p>
+          </div>
 
-    <div className="flex items-end justify-between mb-10">
-      <div>
-        <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#42612F]">
-          Featured Products
-        </span>
-
-        <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mt-0.5">
-          Best-selling fresh picks
-        </h2>
-      </div>
-
-      <Link
-        to="/products"
-        className="text-xs font-bold text-[#42612F] hover:text-[#2d4320] flex items-center gap-1 group transition-colors"
-      >
-        View All Products
-        <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-      </Link>
-    </div>
-
-    {/* Loading */}
-    {loadingProducts && (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {[1, 2, 3, 4].map((item) => (
-          <div
-            key={item}
-            className="h-80 bg-white rounded-2xl animate-pulse border border-slate-200"
-          />
-        ))}
-      </div>
-    )}
-
-    {/* Products */}
-    {!loadingProducts && featuredProducts.length > 0 && (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-
-        {featuredProducts.map((prod) => (
-          <div
-            key={prod._id}
-            className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
-          >
-
-            {/* Product Image */}
-            <div className="relative h-48 bg-slate-100 overflow-hidden">
-
-              <img
-                src={prod.image}
-                alt={prod.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-              />
-
-              {/* Category */}
-              <span className="absolute top-3 left-3 bg-[#324B25]/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">
-                {prod.category}
-              </span>
-
-              {/* Favorite */}
-              <button
-                aria-label="Add to favorites"
-                className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-md rounded-full hover:bg-white text-slate-600 hover:text-red-500 transition-colors shadow-sm"
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["✦", "MarketLink AI", "Ask about products, farmers, and markets.", "/assistant"],
+              ["🌱", "About MarketLink", "See the idea behind the workflow.", "/about"],
+              ["💬", "Contact & Support", "Find help for general questions.", "/contact"],
+              ["❓", "FAQ & Guide", "Quick answers for buying & selling.", "/faq"],
+            ].map(([icon, title, text, to]) => (
+              <Link
+                key={title}
+                to={to}
+                className="group flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 transition hover:border-slate-400 hover:bg-white"
               >
-                <Heart className="w-3.5 h-3.5" />
-              </button>
-
-            </div>
-
-            {/* Product Info */}
-            <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
-
-              <div>
-
-                <div className="flex items-center justify-between">
-
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-[#42612F] transition-colors">
-                    {prod.name}
-                  </h3>
-
-                  <div className="flex items-center gap-1 text-[11px] font-bold text-slate-700">
-                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-
-                    {prod.rating || "New"}
-                  </div>
-
-                </div>
-
-                {/* Farmer */}
-                <p className="text-xs text-slate-500 mt-1">
-                  {prod.farmer?.name || "Local Farmer"}
-                </p>
-
-              </div>
-
-              {/* Price */}
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white border border-slate-200 text-sm">{icon}</span>
                 <div>
-                  <span className="text-lg font-black text-slate-900">
-                    Rs. {prod.price}
-                  </span>
-
-                  <span className="text-[10px] text-slate-500 font-medium ml-1">
-                    {prod.unit || "per unit"}
-                  </span>
+                  <h4 className="text-xs font-bold text-slate-900">{title}</h4>
+                  <p className="text-[10px] text-slate-500 leading-tight mt-0.5">{text}</p>
                 </div>
-
-                <button
-                  className="px-3.5 py-2 rounded-lg bg-[#42612F] hover:bg-[#344E25] active:scale-95 text-white text-xs font-bold transition-all shadow-sm"
-                >
-                  Add to cart
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-        ))}
-
-      </div>
-    )}
-
-    {/* No Products */}
-    {!loadingProducts && featuredProducts.length === 0 && (
-      <div className="text-center py-12">
-        <ShoppingBag className="mx-auto w-10 h-10 text-slate-400 mb-3" />
-
-        <p className="text-sm font-semibold text-slate-600">
-          No products available yet.
-        </p>
-
-        <p className="text-xs text-slate-400 mt-1">
-          Products added by farmers will appear here.
-        </p>
-      </div>
-    )}
-
-  </div>
-</section>
-
-
-      {/* ================= PANELS LINK SECTION ================= */}
-      <section className="py-16 max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-br from-emerald-50 to-emerald-100/40 border border-emerald-200/60 p-6 rounded-2xl flex flex-col justify-between hover:shadow-lg transition-shadow">
-            <div>
-              <div className="w-11 h-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center mb-4 shadow-md shadow-emerald-600/20">
-                <Store className="w-5 h-5" />
-              </div>
-              <h3 className="font-extrabold text-slate-900 text-lg">Admin Panel</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Complete platform control — products, orders, users, markets, and analytical insights.
-              </p>
-            </div>
-            <Link to="/admin" className="mt-6 text-xs font-bold text-[#42612F] flex items-center gap-1 hover:gap-2 transition-all">
-              Open Panel <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="bg-gradient-to-br from-amber-50 to-amber-100/40 border border-amber-200/60 p-6 rounded-2xl flex flex-col justify-between hover:shadow-lg transition-shadow">
-            <div>
-              <div className="w-11 h-11 rounded-xl bg-amber-600 text-white flex items-center justify-center mb-4 shadow-md shadow-amber-600/20">
-                <Users className="w-5 h-5" />
-              </div>
-              <h3 className="font-extrabold text-slate-900 text-lg">Farmer Panel</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                List produce, manage live stock, orders, payouts, and localized market listings.
-              </p>
-            </div>
-            <Link to="/farmer" className="mt-6 text-xs font-bold text-amber-800 flex items-center gap-1 hover:gap-2 transition-all">
-              Open Panel <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100/40 border border-blue-200/60 p-6 rounded-2xl flex flex-col justify-between hover:shadow-lg transition-shadow">
-            <div>
-              <div className="w-11 h-11 rounded-xl bg-blue-600 text-white flex items-center justify-center mb-4 shadow-md shadow-blue-600/20">
-                <ShoppingBag className="w-5 h-5" />
-              </div>
-              <h3 className="font-extrabold text-slate-900 text-lg">Customer Panel</h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Explore local produce, manage cart, checkout, saved favorites, and order history.
-              </p>
-            </div>
-            <Link to="/dashboard" className="mt-6 text-xs font-bold text-blue-800 flex items-center gap-1 hover:gap-2 transition-all">
-              Open Panel <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ================= HOW IT WORKS ================= */}
-      <section className="py-20 bg-[#1E2E16] text-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-6 space-y-6">
-            <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
-              How MarketLink Works
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black leading-tight">
-              From farm to basket, <br />
-              <span className="text-slate-300">without the clutter.</span>
-            </h2>
+      {/* Featured Products */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-end justify-between mb-6">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Featured Products</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Best-selling fresh picks</h2>
+          </div>
+          <Link to="/products" className="text-xs font-bold text-slate-900 hover:underline">
+            View All Products →
+          </Link>
+        </div>
 
-            <div className="space-y-3.5 pt-2">
-              {[
-                { num: "01", title: "Browse", desc: "Search local markets and fresh harvest listings." },
-                { num: "02", title: "Add to cart", desc: "Choose quantities and build your basket." },
-                { num: "03", title: "Checkout", desc: "Confirm pickup or direct local delivery." },
-                { num: "04", title: "Enjoy", desc: "Savor local and honest fresh produce." },
-              ].map((step, idx) => (
-                <div key={idx} className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-xl flex items-center gap-4 transition-colors hover:bg-white/10">
-                  <span className="text-base font-black text-amber-400">{step.num}</span>
-                  <div>
-                    <h4 className="text-sm font-bold text-white">{step.title}</h4>
-                    <p className="text-xs text-slate-300">{step.desc}</p>
+        {loadingProducts ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-64 rounded-2xl bg-slate-100 animate-pulse" />
+            ))}
+          </div>
+        ) : featuredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {featuredProducts.slice(0, 8).map((prod) => (
+              <div key={prod._id || prod.id} className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition">
+                <div className="h-44 bg-slate-100 relative">
+                  <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" />
+                  <span className="absolute top-2 left-2 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
+                    {prod.category || "Produce"}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-slate-900 text-sm">{prod.name}</h3>
+                  <p className="text-xs text-slate-500 mt-1">{prod.farmer?.name || "Local Farmer"}</p>
+                  <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
+                    <span className="text-base font-black text-slate-900">Rs. {prod.price}</span>
+                    <button className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+                      Add
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
+        ) : (
+          <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-xs text-slate-500">
+            No products available at the moment.
+          </div>
+        )}
+      </section>
 
-          <div className="lg:col-span-6 bg-[#14200E] p-8 md:p-10 rounded-3xl border border-white/10 shadow-2xl space-y-6">
-            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">Built for Market Day</span>
-            <h3 className="text-2xl font-black">Clean e-commerce experience.</h3>
-            <p className="text-sm text-slate-300 leading-relaxed font-normal">
-              Cart, favorites, and orders persist seamlessly. The structure is fully ready for MongoDB, live farmer inventory, and direct online payments.
-            </p>
-            <div className="pt-2">
-              <Link to="/products" className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#42612F] hover:bg-[#344E25] text-white font-bold text-xs rounded-xl transition-all shadow-md">
-                Start Shopping
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+      {/* Role Workspaces */}
+      <section className="bg-slate-50 py-16 mt-12 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Built for Market Day</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Use MarketLink the way you shop.</h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              ["🧑‍🌾", "Farmer Workspace", "List fresh produce, manage stock, orders, and pickup slots.", "/farmer"],
+              ["🛒", "Customer Workspace", "Shop produce, manage cart, choose pickup, and view order history.", "/dashboard"],
+              ["📅", "Market Day Toolkit", "See market timings, pickup info, and local profiles in one place.", "/markets"],
+            ].map(([icon, title, text, to]) => (
+              <div key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs flex flex-col justify-between">
+                <div>
+                  <span className="text-3xl">{icon}</span>
+                  <h3 className="mt-3 text-lg font-extrabold text-slate-900">{title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-slate-600">{text}</p>
+                </div>
+                <Link to={to} className="mt-6 inline-flex items-center text-xs font-bold text-slate-900 hover:underline">
+                  Explore →
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -422,5 +244,3 @@ useEffect(() => {
     </div>
   );
 }
-
-export default Home;
