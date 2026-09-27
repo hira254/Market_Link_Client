@@ -248,8 +248,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../utils/BaseUrl";
 
-import ProductCard from "../../components/common/ProductCard";
-import { marketSeed } from "../portal/shared";
+// import ProductCard from "../../components/common/ProductCard";
+// import { marketSeed } from "../portal/shared";
 
 const heroFarmer = "/images/marketlink-hero-farmer-v3.webp";
 
