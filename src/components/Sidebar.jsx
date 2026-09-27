@@ -140,11 +140,7 @@ const Sidebar = () => {
           label: "Favorites",
           icon: Heart,
         },
-        {
-          path: "/reviews",
-          label: "My Reviews",
-          icon: Star,
-        },
+       
         {
           path: "/notifications",
           label: "Notifications",
